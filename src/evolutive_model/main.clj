@@ -3,7 +3,7 @@
 
 (defn es-feriado?
   [fecha-consulta feriados]
-  true)
+  (some #(= fecha-consulta %)feriados))
 
 (defn -main
   "I don't do a whole lot ... yet."
