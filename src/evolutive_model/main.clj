@@ -20,12 +20,12 @@
   {:Tipo :Anual :dia dia :mes mes})
 
 (defmulti feriado? :Tipo)
-(defmethod feriado? :Puntual [p feriado]
-   (= p feriado))
-(defmethod feriado? :Anual [p feriado]
+(defmethod feriado? :Puntual [feriado fecha-consulta]
+   (= feriado fecha-consulta))
+(defmethod feriado? :Anual [feriado fecha-consulta]
   (and
-   (mismo-clave p feriado :dia)
-   (mismo-clave p feriado :mes)))
+   (mismo-clave feriado fecha-consulta :dia)
+   (mismo-clave feriado fecha-consulta :mes)))
 
 (defn -main
   "I don't do a whole lot ... yet."
