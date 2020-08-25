@@ -28,3 +28,8 @@
 (deftest test-feriado-puntual-creacion
   (testing "feriadob puntual invalido"
    (is (thrown? AssertionError (puntual 1 13 2020)))))
+
+(deftest test-check
+  (is (=
+       (stest/summarize-results (stest/check `fecha))
+       {:total 1, :check-passed 1})))

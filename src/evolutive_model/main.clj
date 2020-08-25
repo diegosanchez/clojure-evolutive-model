@@ -6,8 +6,18 @@
   (s/and pos-int? (s/int-in 1 13)))
 
 (defn fecha [dia mes anio]
-  {:pre [(s/valid? ::mes mes)]}
-  {:dia dia :mes mes :anio anio})
+  {::dia dia ::mes mes ::anio anio})
+
+(s/def ::fecha
+  (s/keys :req [::dia pos-int?
+               ::mes ::mes
+               ::anio pos-int?]))
+
+(s/fdef fecha
+  :args (s/cat :dia pos-int?
+               :mes ::mes
+               :anio pos-int?)
+  :ret ::fecha)
 
 (defn mismo-clave [fecha1 fecha2 clave]
   (= (clave fecha1) (clave fecha2)))
