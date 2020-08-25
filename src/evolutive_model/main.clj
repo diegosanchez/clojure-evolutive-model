@@ -9,15 +9,26 @@
   {:pre [(s/valid? ::mes mes)]}
   {:dia dia :mes mes :anio anio})
 
-(defn feriado-puntual [dia mes anio]
-  (fecha dia mes anio))
+(defn mismo-dia [fecha1 fecha2]
+  (= (:dia fecha1) (:dia fecha2)))
 
-(defn feriado-anual [dia mes]
-  {:dia dia :mes mes})
+(defn mismo-mes [fecha1 fecha2]
+  (= (:mes fecha1) (:mes fecha2)))
 
-(defn es-feriado?
-  [fecha-consulta feriados]
-  (some #(= fecha-consulta %)feriados))
+(defn puntual [dia mes anio]
+  {:pre [(s/valid? ::mes mes)]}
+  {:Tipo :Puntual :dia dia :mes mes :anio anio})
+
+(defn anual [dia mes]
+  {:Tipo :Anual :dia dia :mes mes})
+
+(defmulti feriado? :Tipo)
+(defmethod feriado? :Puntual [p feriado]
+   (= p feriado))
+(defmethod feriado? :Anual [p feriado]
+  (and
+   (mismo-dia p feriado)
+   (mismo-mes p feriado)))
 
 (defn -main
   "I don't do a whole lot ... yet."
