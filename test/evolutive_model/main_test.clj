@@ -1,5 +1,6 @@
 (ns evolutive-model.main-test
   (:require [clojure.test :refer :all]
+            [clojure.spec.test.alpha :as st]
             [evolutive-model.main :refer :all]))
 
 (deftest a-test
@@ -26,10 +27,10 @@
     (is (feriado? dic-25 dic-25))))
 
 (deftest test-feriado-puntual-creacion
-  (testing "feriadob puntual invalido"
+  (testing "feriado puntual invalido"
    (is (thrown? AssertionError (puntual 1 13 2020)))))
 
 (deftest test-check
   (is (=
-       (stest/summarize-results (stest/check `fecha))
+       (st/summarize-results (st/check `fecha))
        {:total 1, :check-passed 1})))
