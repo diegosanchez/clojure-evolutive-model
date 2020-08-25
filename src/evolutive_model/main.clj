@@ -9,11 +9,8 @@
   {:pre [(s/valid? ::mes mes)]}
   {:dia dia :mes mes :anio anio})
 
-(defn mismo-dia [fecha1 fecha2]
-  (= (:dia fecha1) (:dia fecha2)))
-
-(defn mismo-mes [fecha1 fecha2]
-  (= (:mes fecha1) (:mes fecha2)))
+(defn mismo-clave [fecha1 fecha2 clave]
+  (= (clave fecha1) (clave fecha2)))
 
 (defn puntual [dia mes anio]
   {:pre [(s/valid? ::mes mes)]}
@@ -27,8 +24,8 @@
    (= p feriado))
 (defmethod feriado? :Anual [p feriado]
   (and
-   (mismo-dia p feriado)
-   (mismo-mes p feriado)))
+   (mismo-clave p feriado :dia)
+   (mismo-clave p feriado :mes)))
 
 (defn -main
   "I don't do a whole lot ... yet."
