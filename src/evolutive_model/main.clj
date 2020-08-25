@@ -5,9 +5,15 @@
 (s/def ::mes
   (s/and pos-int? (s/int-in 1 13)))
 
-(defn feriado-puntual [dia mes anio]
+(defn fecha [dia mes anio]
   {:pre [(s/valid? ::mes mes)]}
   {:dia dia :mes mes :anio anio})
+
+(defn feriado-puntual [dia mes anio]
+  (fecha dia mes anio))
+
+(defn feriado-anual [dia mes]
+  {:dia dia :mes mes})
 
 (defn es-feriado?
   [fecha-consulta feriados]

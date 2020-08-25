@@ -10,12 +10,20 @@
   (feriado-puntual 10 12 2020))
 
 (def hoy
-  {:dia 24 :mes 8 :anio 2020})
+  (fecha 24 8 2020))
 
 (deftest test-feriado-puntual
   (testing "10-12-2020 es feriado puntual"
-    (is (not (es-feriado? hoy [{:dia 10 :mes 12 :anio 2020}])))
-    (is (es-feriado? dic-10-2020 [{:dia 10 :mes 12 :anio 2020}]))))
+    (is (not (es-feriado? hoy [dic-10-2020])))
+    (is (es-feriado? dic-10-2020 [dic-10-2020]))))
+
+(def dic-25
+  (feriado-anual 25 12))
+
+(deftest test-feriado-anual
+  (testing "feriado anual"
+    (is (not (es-feriado? hoy [dic-25])))
+    (is (es-feriado? dic-25 [dic-25]))))
 
 (deftest test-feriado-puntual-creacion
   (testing "feriadob puntual invalido"
