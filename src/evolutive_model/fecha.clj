@@ -1,6 +1,11 @@
 (ns evolutive-model.fecha
   (:require [clojure.spec.alpha :as s]))
 
+(defn fecha-2-timestamp [fecha]
+  (.getTime (new java.util.Date
+                 (- (:anio fecha) 1900)
+                 (- (:mes fecha) 1)
+                 (:dia fecha))))
 (s/def ::mes
   (s/and pos-int? (s/int-in 1 13)))
 
@@ -19,4 +24,5 @@
   {::dia dia ::mes mes ::anio anio})
 
 (defn mayor [fecha1 fecha2]
-  (> (::anio fecha1) (::anio fecha2)))
+  (> (fecha-2-timestamp fecha1) (fecha-2-timestamp fecha2)))
+
