@@ -1,7 +1,8 @@
 (ns evolutive-model.main-test
   (:require [clojure.test :refer :all]
             [clojure.spec.test.alpha :as st]
-            [evolutive-model.main :refer :all]))
+            [evolutive-model.main :refer :all]
+            [evolutive-model.fecha :as f]))
 
 (deftest a-test
   (testing "FIXME, I fail."
@@ -11,7 +12,7 @@
   (puntual 10 12 2020))
 
 (def hoy
-  (fecha 24 8 2020))
+  (f/fecha 24 8 2020))
 
 (def dic-25
   (anual 25 12))
@@ -32,5 +33,5 @@
 
 (deftest test-check
   (is (=
-       (st/summarize-results (st/check `fecha))
+       (st/summarize-results (st/check `f/fecha))
        {:total 1, :check-passed 1})))
