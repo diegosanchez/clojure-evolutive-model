@@ -15,6 +15,10 @@
   {:Tipo :Anual
    :dia dia :mes mes})
 
+(defn desde [dia mes anio]
+  {:Tipo  :Desde
+   :desde (f/fecha dia mes anio)})
+
 (defmulti feriado? :Tipo)
 (defmethod feriado? :Puntual [feriado fecha-consulta]
    (= feriado fecha-consulta))
@@ -22,3 +26,5 @@
   (and
    (mismo-clave feriado fecha-consulta :dia)
    (mismo-clave feriado fecha-consulta :mes)))
+(defmethod feriado? :Desde [feriado fecha-consulta]
+  (f/mayor fecha-consulta (:desde feriado)))

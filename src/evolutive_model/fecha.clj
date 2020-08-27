@@ -18,3 +18,5 @@
 (defn fecha [dia mes anio]
   {::dia dia ::mes mes ::anio anio})
 
+(defn mayor [fecha1 fecha2]
+  (> (::anio fecha1) (::anio fecha2)))
