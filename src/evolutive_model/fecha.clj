@@ -15,9 +15,9 @@
                ::anio pos-int?]))
 
 (s/fdef fecha
-  :args (s/cat :dia pos-int?
-               :mes ::mes
-               :anio pos-int?)
+  :args (s/cat ::dia pos-int?
+               ::mes ::mes
+               ::anio pos-int?)
   :ret ::fecha)
 
 (defn fecha [dia mes anio]
