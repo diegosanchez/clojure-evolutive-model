@@ -3,9 +3,9 @@
 
 (defn fecha-2-timestamp [fecha]
   (.getTime (new java.util.Date
-                 (- (:anio fecha) 1900)
-                 (- (:mes fecha) 1)
-                 (:dia fecha))))
+                 (- (::anio fecha) 1900)
+                 (- (::mes fecha) 1)
+                 (::dia fecha))))
 (s/def ::mes
   (s/and pos-int? (s/int-in 1 13)))
 
