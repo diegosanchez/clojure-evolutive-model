@@ -23,6 +23,12 @@
 (def dic-25
   (anual 25 12))
 
+(def un-domingo
+  (f/fecha 6 9 2020))
+
+(def domingo
+  (semanal))
+
 (deftest test-feriado-puntual
   (testing "10-12-2020 es feriado puntual"
     (is (not (feriado? dic-10-2020 hoy )))
@@ -41,6 +47,11 @@
 (deftest test-feriado-puntual-creacion
   (testing "feriado puntual invalido"
    (is (thrown? AssertionError (puntual 1 13 2020)))))
+
+(deftest test-feriado-semanal
+  (testing "feriado semanal"
+    (is (feriado? domingo un-domingo))
+    (is (not (feriado? domingo hoy)))))
 
 (deftest test-check
   (is (=

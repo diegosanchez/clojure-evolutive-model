@@ -1,6 +1,13 @@
 (ns evolutive-model.fecha
   (:require [clojure.spec.alpha :as s]))
 
+
+(defn fecha-2-java [fecha]
+  (new java.util.Date
+                 (- (::anio fecha) 1900)
+                 (- (::mes fecha) 1)
+                 (::dia fecha)))
+
 (defn fecha-2-timestamp [fecha]
   (.getTime (new java.util.Date
                  (- (::anio fecha) 1900)
@@ -26,3 +33,7 @@
 (defn mayor [fecha1 fecha2]
   (> (fecha-2-timestamp fecha1) (fecha-2-timestamp fecha2)))
 
+(defn mismo-dia [fecha numero-dia]
+  (=
+   numero-dia
+   (.getDay (fecha-2-java fecha))))

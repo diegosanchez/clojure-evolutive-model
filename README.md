@@ -5,8 +5,8 @@
 
 ## Use cases list
 
-- [ ] Weekly holiday (Ex.: Sunday)
+- [X] Weekly holiday (Ex.: Sunday)
 - [X] Annual leave (Ex.: 12/25/2020)
 - [X] Punctual holiday (arbitrary date)
-- [ ] Since "date" annual holiday (Ex.: 4/2/1982)
+- [X] Since "date" annual holiday (Ex.: 4/2/1982)
 
