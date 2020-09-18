@@ -1,4 +1,5 @@
 (ns evolutive-model.fecha
+  (:require [clojure.spec.gen.alpha :as gen]
   (:require [clojure.spec.alpha :as s]))
 
 
@@ -40,3 +41,12 @@
   (=
    numero-dia
    (.getDay (fecha-2-java fecha))))
+
+
+(def dia-mes
+  (gen/fmap #(identity {:dia (first %) :mes (last %)})
+            (gen/tuple
+             (s/gen pos-int?)
+             (s/gen (s/and
+                     pos-int?
+                     (s/int-in 1 13))))))
