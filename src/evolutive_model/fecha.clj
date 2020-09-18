@@ -13,13 +13,16 @@
                  (- (::anio fecha) 1900)
                  (- (::mes fecha) 1)
                  (::dia fecha))))
+
+(s/def ::dia pos-int?)
+
 (s/def ::mes
   (s/and pos-int? (s/int-in 1 13)))
 
+(s/def ::anio pos-int?)
+
 (s/def ::date
-  (s/keys :req [::dia pos-int?
-                ::mes ::mes
-                ::anio pos-int?]))
+  (s/keys :req [::dia ::mes ::anio]))
 
 (s/fdef fecha
   :args (s/cat ::dia pos-int?
