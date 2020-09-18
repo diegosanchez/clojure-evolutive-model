@@ -24,14 +24,17 @@
    :dia-semana 0})
 
 (defmulti feriado? :Tipo)
+
 (defmethod feriado? :Puntual [feriado fecha-consulta]
    (= feriado fecha-consulta))
+
 (defmethod feriado? :Anual [feriado fecha-consulta]
   (and
    (mismo-clave feriado fecha-consulta :dia)
    (mismo-clave feriado fecha-consulta :mes)))
+
 (defmethod feriado? :Desde [feriado fecha-consulta]
   (f/mayor fecha-consulta (:desde feriado)))
-(defmethod feriado? :Semanal
-  [feriado fecha-consulta]
+
+(defmethod feriado? :Semanal [feriado fecha-consulta]
   (f/mismo-dia fecha-consulta (:dia-semana feriado)))
