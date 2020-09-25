@@ -1,13 +1,12 @@
 (ns evolutive-model.fecha
   (:require [clojure.spec.gen.alpha :as gen]
-  (:require [clojure.spec.alpha :as s]))
-
+            [clojure.spec.alpha :as s]))
 
 (defn fecha-2-java [fecha]
   (new java.util.Date
-                 (- (::anio fecha) 1900)
-                 (- (::mes fecha) 1)
-                 (::dia fecha)))
+       (- (::anio fecha) 1900)
+       (- (::mes fecha) 1)
+       (::dia fecha)))
 
 (defn fecha-2-timestamp [fecha]
   (.getTime (new java.util.Date
@@ -39,7 +38,6 @@
    numero-dia
    (.getDay (fecha-2-java fecha))))
 
-
 (defn fecha [dia mes anio]
   {::dia dia ::mes mes ::anio anio})
 
@@ -52,5 +50,5 @@
              #(apply dia-mes-anio-valido? %)
              (gen/tuple
               (s/gen (s/and pos-int? (s/int-in 1 32)))
-              (s/gen (s/and pos-int? (s/int-in 1 13)))
+              (s/gen ::mes)
               (s/gen pos-int?)))))
