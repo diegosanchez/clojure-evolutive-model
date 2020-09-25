@@ -2,6 +2,66 @@
   (:require [clojure.spec.gen.alpha :as gen]
             [clojure.spec.alpha :as s]))
 
+(s/def ::mes
+  (s/int-in 1 13))
+
+(defn mes-con-31-dias?
+  [mes]
+  (or (= mes 1)
+      (= mes 3)
+      (= mes 5)
+      (= mes 7)
+      (= mes 10)
+      (= mes 12)))
+
+(defn mes-con-30-dias?
+  [mes]
+  (or (= mes 4)
+      (= mes 6)
+      (= mes 8)
+      (= mes 11)))
+
+(defn mes-con-29-dias?
+  [mes]
+  (= mes 2))
+
+(defn mes-con-28-dias?
+  [mes]
+  (= mes 2))
+
+(defn anio-bisiesto?
+  [anio]
+  (or
+   (zero? (mod anio 400))
+   (zero? (mod anio 4))))
+
+(defn mes-con-maximo-de-dias
+  [maximo]
+  (s/int-in 1 (+ maximo 1)))
+
+(defn fecha [anio mes dia]
+  {:pre [(and
+          (s/valid? ::mes mes)
+          (or
+           (and (mes-con-31-dias? mes) (s/valid? (mes-con-maximo-de-dias 31) dia))
+           (and (mes-con-30-dias? mes) (s/valid? (mes-con-maximo-de-dias 30) dia))
+           (and (anio-bisiesto? anio)  (s/valid? (mes-con-maximo-de-dias 29) dia))
+           (and (comp not anio-bisiesto? anio) (s/valid? (mes-con-maximo-de-dias 28) dia))))]}
+  {:dia dia :mes mes :anio anio})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (defn fecha-2-java [fecha]
   (new java.util.Date
        (- (::anio fecha) 1900)
@@ -14,21 +74,13 @@
                  (- (::mes fecha) 1)
                  (::dia fecha))))
 
-(s/def ::dia pos-int?)
-
-(s/def ::mes
-  (s/and pos-int? (s/int-in 1 13)))
+(s/def ::dia
+  (s/and pos-int? (s/int-in 1 32)))
 
 (s/def ::anio pos-int?)
 
 (s/def ::date
   (s/keys :req [::dia ::mes ::anio]))
-
-(s/fdef fecha
-  :args (s/cat ::dia pos-int?
-               ::mes ::mes
-               ::anio pos-int?)
-  :ret ::date)
 
 (defn mayor [fecha1 fecha2]
   (> (fecha-2-timestamp fecha1) (fecha-2-timestamp fecha2)))
@@ -38,17 +90,39 @@
    numero-dia
    (.getDay (fecha-2-java fecha))))
 
-(defn fecha [dia mes anio]
-  {::dia dia ::mes mes ::anio anio})
+(defn leap-year-return-or
+  [year value-leap-year value-not-leap-year]
+  (cond (zero? (mod year 400)) value-leap-year
+        (zero? (mod year 100)) value-not-leap-year
+        (zero? (mod year 4)) value-leap-year
+        :default value-not-leap-year))
 
-(defn dia-mes-anio-valido? [dia mes anio]
-  true)
+(defn month-biggest-day
+  [month year]
+  (cond
+    (= month 2) (leap-year-return-or year 29 28)
+    (some #(= month %) '(1 3 5 7 9 10 12)) 31
+    :else 30))
+
+(def gen-month-and-year
+  (gen/tuple
+   (s/gen (s/and pos-int? (s/int-in 1 13)))
+   (s/gen (s/and pos-int? (s/int-in 1 500)))))
+
+(defn gen-days-smaller-than 
+  [max]
+  (s/gen (s/and pos-int? (s/int-in 1 (+ max 1)))))
+
+(def gen-day-and-month
+  (gen/bind
+   gen-month-and-year
+   (fn [month-and-year]
+     (gen/tuple
+      (gen/return (last month-and-year))
+      (gen/return (first month-and-year))
+      (gen-days-smaller-than 
+       (apply month-biggest-day month-and-year))))))
 
 (def generador-fecha
-  (gen/fmap #(apply fecha %)
-            (gen/such-that
-             #(apply dia-mes-anio-valido? %)
-             (gen/tuple
-              (s/gen (s/and pos-int? (s/int-in 1 32)))
-              (s/gen ::mes)
-              (s/gen pos-int?)))))
+  (gen/fmap #(apply fecha %) gen-day-and-month))
+
