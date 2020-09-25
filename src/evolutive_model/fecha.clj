@@ -31,9 +31,6 @@
                ::anio pos-int?)
   :ret ::date)
 
-(defn fecha [dia mes anio]
-  {::dia dia ::mes mes ::anio anio})
-
 (defn mayor [fecha1 fecha2]
   (> (fecha-2-timestamp fecha1) (fecha-2-timestamp fecha2)))
 
@@ -43,10 +40,17 @@
    (.getDay (fecha-2-java fecha))))
 
 
-(def dia-mes
-  (gen/fmap #(identity {:dia (first %) :mes (last %)})
-            (gen/tuple
-             (s/gen pos-int?)
-             (s/gen (s/and
-                     pos-int?
-                     (s/int-in 1 13))))))
+(defn fecha [dia mes anio]
+  {::dia dia ::mes mes ::anio anio})
+
+(defn dia-mes-anio-valido? [dia mes anio]
+  true)
+
+(def generador-fecha
+  (gen/fmap #(apply fecha %)
+            (gen/such-that
+             #(apply dia-mes-anio-valido? %)
+             (gen/tuple
+              (s/gen (s/and pos-int? (s/int-in 1 32)))
+              (s/gen (s/and pos-int? (s/int-in 1 13)))
+              (s/gen pos-int?)))))
