@@ -7,27 +7,11 @@
 
 (defn mes-con-31-dias?
   [mes]
-  (or (= mes 1)
-      (= mes 3)
-      (= mes 5)
-      (= mes 7)
-      (= mes 10)
-      (= mes 12)))
+  (not (nil? (some #(= mes %) '(1 3 5 7 10 12)))))
 
 (defn mes-con-30-dias?
   [mes]
-  (or (= mes 4)
-      (= mes 6)
-      (= mes 8)
-      (= mes 11)))
-
-(defn mes-con-29-dias?
-  [mes]
-  (= mes 2))
-
-(defn mes-con-28-dias?
-  [mes]
-  (= mes 2))
+  (not (nil? (some #(= mes %) '(4 6 8 11)))))
 
 (defn anio-bisiesto?
   [anio]
@@ -43,10 +27,10 @@
   {:pre [(and
           (s/valid? ::mes mes)
           (or
-           (and (mes-con-31-dias? mes) (s/valid? (mes-con-maximo-de-dias 31) dia))
-           (and (mes-con-30-dias? mes) (s/valid? (mes-con-maximo-de-dias 30) dia))
-           (and (anio-bisiesto? anio)  (s/valid? (mes-con-maximo-de-dias 29) dia))
-           (and (comp not anio-bisiesto? anio) (s/valid? (mes-con-maximo-de-dias 28) dia))))]}
+           (and (mes-con-31-dias? mes)         (s/valid? (mes-con-maximo-de-dias 31) dia))
+           (and (mes-con-30-dias? mes)         (s/valid? (mes-con-maximo-de-dias 30) dia))
+           (and (comp not anio-bisiesto? anio) (s/valid? (mes-con-maximo-de-dias 28) dia))
+           (and (anio-bisiesto? anio)          (s/valid? (mes-con-maximo-de-dias 29) dia))))]}
   {:dia dia :mes mes :anio anio})
 
 
@@ -73,14 +57,6 @@
                  (- (::anio fecha) 1900)
                  (- (::mes fecha) 1)
                  (::dia fecha))))
-
-(s/def ::dia
-  (s/and pos-int? (s/int-in 1 32)))
-
-(s/def ::anio pos-int?)
-
-(s/def ::date
-  (s/keys :req [::dia ::mes ::anio]))
 
 (defn mayor [fecha1 fecha2]
   (> (fecha-2-timestamp fecha1) (fecha-2-timestamp fecha2)))
