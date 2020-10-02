@@ -15,4 +15,5 @@
 (deftest creacion-fecha-dia-invalido
   (is (thrown? AssertionError (f/fecha 2019 2 29)))
   (is (thrown? AssertionError (f/fecha 2005 4 31)))
-  (is (thrown? AssertionError (f/fecha 2005 1 32))))
+  (is (thrown? AssertionError (f/fecha 2005 1 32)))
+)
