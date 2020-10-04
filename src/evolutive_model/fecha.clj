@@ -1,5 +1,6 @@
 (ns evolutive-model.fecha
-  (:require [clojure.spec.gen.alpha :as gen]
+  (:require [evolutive-model.fecha-port :as jf]
+            [clojure.spec.gen.alpha :as gen]
             [clojure.spec.alpha :as s]))
 
 (defn mes-con-31-dias?
@@ -29,37 +30,22 @@
 (defn dia-spec
   [anio mes]
   (cond
-    (mes-con-30-dias? mes)       (mes-con-maximo-de-dias 30)
     (mes-con-31-dias? mes)       (mes-con-maximo-de-dias 31)
+    (mes-con-30-dias? mes)       (mes-con-maximo-de-dias 30)
     (anio-bisiesto? anio)        (mes-con-maximo-de-dias 29)
-    (not (anio-bisiesto? anio))  (mes-con-maximo-de-dias 28)))
+    :else                        (mes-con-maximo-de-dias 28)))
 
-(defn fecha [anio mes dia]
-  {:pre [(and
-          (s/valid? ::anio-spec anio)
-          (s/valid? ::mes-spec mes)
-          (s/valid? (dia-spec anio mes) dia))]}
+(defn fecha
+  [anio mes dia]
+  {:pre [(and (s/valid? ::anio-spec anio)
+              (s/valid? ::mes-spec mes)
+              (s/valid? (dia-spec anio mes) dia))]}
   {:dia dia :mes mes :anio anio})
 
-(defn fecha-2-java [fecha]
-  (new java.util.Date
-       (- (::anio-spec fecha) 1900)
-       (- (::mes-spec fecha) 1)
-       (::dia fecha)))
-
-(defn fecha-2-timestamp [fecha]
-  (.getTime (new java.util.Date
-                 (- (::anio-spec fecha) 1900)
-                 (- (::mes-spec fecha) 1)
-                 (::dia fecha))))
-
-(defn mayor [fecha1 fecha2]
-  (> (fecha-2-timestamp fecha1) (fecha-2-timestamp fecha2)))
-
-(defn mismo-dia [fecha numero-dia]
-  (=
-   numero-dia
-   (.getDay (fecha-2-java fecha))))
+(defn mayor
+  [fecha1 fecha2]
+  (> (jf/fecha-2-timestamp fecha1)
+     (jf/fecha-2-timestamp fecha2)))
 
 (def gen-anio-mes-dia
   (gen/bind
@@ -75,5 +61,6 @@
 
           
 (def gen-fecha
-  (gen/fmap #(apply fecha %) gen-anio-mes-dia))
+  (gen/fmap #(apply fecha %)
+            gen-anio-mes-dia))
 

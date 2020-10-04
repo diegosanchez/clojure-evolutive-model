@@ -1,4 +1,5 @@
 (ns evolutive-model.main
+  (:require [evolutive-model.fecha-port :as jf])
   (:require [evolutive-model.fecha :as f])
   (:require [clojure.spec.alpha :as s])
   (:gen-class))
@@ -37,4 +38,4 @@
   (f/mayor fecha-consulta (:desde feriado)))
 
 (defmethod feriado? :Semanal [feriado fecha-consulta]
-  (f/mismo-dia fecha-consulta (:dia-semana feriado)))
+  (jf/mismo-dia fecha-consulta (:dia-semana feriado)))
