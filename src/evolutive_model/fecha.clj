@@ -37,6 +37,18 @@
            (and (anio-bisiesto? anio)          (s/valid? (mes-con-maximo-de-dias 29) dia))))]}
   {:dia dia :mes mes :anio anio})
 
+(defn fecha-2-java [fecha]
+  (new java.util.Date
+       (- (::anio fecha) 1900)
+       (- (::mes fecha) 1)
+       (::dia fecha)))
+
+(defn fecha-2-timestamp [fecha]
+  (.getTime (new java.util.Date
+                 (- (::anio fecha) 1900)
+                 (- (::mes fecha) 1)
+                 (::dia fecha))))
+
 (defn mayor [fecha1 fecha2]
   (> (fecha-2-timestamp fecha1) (fecha-2-timestamp fecha2)))
 
@@ -64,17 +76,4 @@
           
 (def gen-fecha
   (gen/fmap #(apply fecha %) gen-anio-mes-dia))
-
-
-(defn fecha-2-java [fecha]
-  (new java.util.Date
-       (- (::anio fecha) 1900)
-       (- (::mes fecha) 1)
-       (::dia fecha)))
-
-(defn fecha-2-timestamp [fecha]
-  (.getTime (new java.util.Date
-                 (- (::anio fecha) 1900)
-                 (- (::mes fecha) 1)
-                 (::dia fecha))))
 
