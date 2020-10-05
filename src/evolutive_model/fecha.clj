@@ -21,10 +21,10 @@
   [maximo]
   (s/int-in 1 (+ maximo 1)))
 
-(s/def ::mes-spec
+(s/def :fecha/mes-spec
   (s/int-in 1 13))
 
-(s/def ::anio-spec
+(s/def :fecha/anio-spec
   (s/int-in 1900 2400))
 
 (defn dia-spec
@@ -37,8 +37,8 @@
 
 (defn fecha
   [anio mes dia]
-  {:pre [(and (s/valid? ::anio-spec anio)
-              (s/valid? ::mes-spec mes)
+  {:pre [(and (s/valid? :fecha/anio-spec anio)
+              (s/valid? :fecha/mes-spec mes)
               (s/valid? (dia-spec anio mes) dia))]}
   {:dia dia :mes mes :anio anio})
 
@@ -50,8 +50,8 @@
 (def gen-anio-mes-dia
   (gen/bind
     (gen/tuple
-     (s/gen ::anio-spec)
-     (s/gen ::mes-spec))
+     (s/gen :fecha/anio-spec)
+     (s/gen :fecha/mes-spec))
     (fn [lst]
       (let [[anio mes] lst]
         (gen/tuple
