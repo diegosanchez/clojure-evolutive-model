@@ -44,4 +44,4 @@
 
 (defmethod feriado? :Semanal
   [feriado fecha-consulta]
-  (jf/mismo-dia fecha-consulta (:dia-semana feriado)))
+  (f/mismo-dia fecha-consulta (:dia-semana feriado)))

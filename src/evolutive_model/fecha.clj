@@ -42,10 +42,20 @@
               (s/valid? (dia-spec anio mes) dia))]}
   {:dia dia :mes mes :anio anio})
 
+(defn fecha-como-lista
+  [fecha]
+  [ (:anio fecha),
+    (:mes fecha),
+    (:dia fecha)])
+
 (defn mayor
   [fecha1 fecha2]
-  (> (jf/fecha-2-timestamp fecha1)
-     (jf/fecha-2-timestamp fecha2)))
+  (> (apply jf/fecha-2-timestamp (fecha-como-lista fecha1))
+     (apply jf/fecha-2-timestamp (fecha-como-lista fecha2))))
+
+(defn mismo-dia
+  [fecha diaSemana]
+  (apply jf/mismo-dia (concat (fecha-como-lista fecha) [diaSemana])))
 
 (def gen-anio-mes-dia
   (gen/bind

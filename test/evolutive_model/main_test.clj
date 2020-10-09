@@ -39,17 +39,17 @@
     (is (not (feriado? dic-25 hoy)))
     (is (feriado? dic-25 dic-25))))
 
-;; (deftest test-feriado-desde
-;;   (testing "feriado desde"
-;;     (is (feriado? abril-2-1982 hoy))
-;;     (is (not (feriado? abril-2-1982 hoy-abril-2-1982)))))
+(deftest test-feriado-desde
+  (testing "feriado desde"
+    (is (feriado? abril-2-1982 hoy))
+    (is (not (feriado? abril-2-1982 hoy-abril-2-1982)))))
 
-;; (deftest test-feriado-puntual-creacion
-;;   (testing "feriado puntual invalido"
-;;    (is (thrown? AssertionError (puntual 1 13 2020)))))
+(deftest test-feriado-puntual-creacion
+  (testing "feriado puntual invalido"
+   (is (thrown? AssertionError (puntual 1 13 2020)))))
 
-;; (deftest test-feriado-semanal
-;;   (testing "feriado semanal"
-;;     (is (feriado? domingo un-domingo))
-;;     (is (not (feriado? domingo hoy)))))
+(deftest test-feriado-semanal
+  (testing "feriado semanal"
+    (is (feriado? domingo un-domingo))
+    (is (not (feriado? domingo hoy)))))
 
